@@ -51,21 +51,25 @@ public class Visitante implements Serializable {
     // === Métodos ===
     public void registrarEntrada() {
         this.dataVisita = LocalDate.now();
-        this.horaEntrada = LocalTime.now();
+        this.horaEntrada = LocalTime.now().withNano(0); // sem nanossegundos
         this.status = "No condomínio";
         System.out.println("Entrada registrada para " + nome);
     }
 
     public void registrarSaida() {
-        this.horaSaida = LocalTime.now();
+        this.horaSaida = LocalTime.now().withNano(0); // sem nanossegundos
         this.status = "Saiu";
         System.out.println("Saída registrada para " + nome);
     }
 
     @Override
     public String toString() {
-        return nome + " (" + cpf + ") - Status: " + status +
-                (horaEntrada != null ? " | Entrada: " + horaEntrada : "") +
-                (horaSaida != null ? " | Saída: " + horaSaida : "");
+        return "\n--- Visitante ---" +
+                "\nNome: " + nome +
+                "\nCPF: " + cpf +
+                "\nStatus: " + status +
+                "\nEntrada: " + (horaEntrada != null ? horaEntrada : "—") +
+                "\nSaída: " + (horaSaida != null ? horaSaida : "—") +
+                "\n-------------------";
     }
 }

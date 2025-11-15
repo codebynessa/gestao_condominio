@@ -1,3 +1,9 @@
+/**
+ * Autor: Vanessa de Freitas Ferreira
+ * Data: 15/11/2025
+ * Projeto: SeuProjetoAqui
+ * Descrição:
+ */
 package model;
 
 import java.io.Serializable;
@@ -28,24 +34,43 @@ public class Morador implements Serializable {
         this.visitantes = new ArrayList<>();
     }
 
-
-
     // Getters e Setters
-    public int getId() { return id; }
-    public String getNome() { return nome; }
-    public String getCpf() { return cpf; }
-    public String getEmail() { return email; }
-    public String getApartamento() { return apartamento; }
-    public String getTelefone() { return telefone; }
+    public int getId() {
+        return id;
+    }
+    public String getNome() {
+        return nome;
+    }
+    public String getCpf() {
+        return cpf;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public String getApartamento() {
+        return apartamento;
+    }
+    public String getTelefone() {
+        return telefone;
+    }
 
-    public void setNome(String nome) { this.nome = nome; }
-    public void setCpf(String cpf) { this.cpf = cpf; }
-    public void setEmail(String email) { this.email = email; }
-    public void setApartamento(String apartamento) { this.apartamento = apartamento; }
-    public void setTelefone(String telefone) { this.telefone = telefone; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setApartamento(String apartamento) {
+        this.apartamento = apartamento;
+    }
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
 
-
-    // Métodos de domínio
+    // Metodos de dominio
     public void editarMorador(String nome, String cpf, String email, String apartamento, String telefone) {
         this.nome = nome;
         this.cpf = cpf;

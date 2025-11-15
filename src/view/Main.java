@@ -1,16 +1,22 @@
 package view;
 
 import model.*;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         SistemaCondominio sistema = SistemaCondominio.carregarDados();
         Scanner sc = new Scanner(System.in);
+
+        String perfil = login(sc);
+
+        sistema.exibirDashboard();
+
         int opcao;
 
         do {
-            System.out.println("\n=== SISTEMA DE GESTÃO DE CONDOMÍNIO ===");
+            System.out.println("\n=== MENU PRINCIPAL === (Perfil: " + perfil + ")");
             System.out.println("1. Cadastrar morador");
             System.out.println("2. Editar morador");
             System.out.println("3. Remover morador");
@@ -22,12 +28,30 @@ public class Main {
             System.out.println("9. Gerar relatório financeiro");
             System.out.println("10. Listar moradores e visitantes");
             System.out.println("11. Marcar taxa como paga");
+            System.out.println("12. Listar moradores em atraso");
+            System.out.println("13. Listar visitantes presentes no condomínio");
+            System.out.println("14. Exportar relatório (TXT/CSV)");
+            System.out.println("15. Fazer backup automático (JSON)");
+            System.out.println("16. Histórico de alterações");
+            System.out.println("17. Login com perfis");
+            System.out.println("18. Gerar boleto simples");
+            System.out.println("19. Busca inteligente");
+            System.out.println("20. Dashboard inicial");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
-            opcao = sc.nextInt();
-            sc.nextLine();
+
+            opcao = readIntSafe(sc); // SEM nextLine() aqui!
+
+            // Restrição de porteiro
+            if ("porteiro".equals(perfil)) {
+                if (!(opcao == 6 || opcao == 7 || opcao == 8 || opcao == 10 || opcao == 13 || opcao == 20 || opcao == 0 || opcao == 17)) {
+                    System.out.println("❌ Acesso negado para seu perfil (porteiro).");
+                    continue;
+                }
+            }
 
             switch (opcao) {
+
                 case 1 -> {
                     System.out.println("\n--- CADASTRAR MORADOR ---");
                     System.out.print("Nome: ");
@@ -37,18 +61,16 @@ public class Main {
                     System.out.print("E-mail: ");
                     String email = sc.nextLine();
                     System.out.print("Apartamento: ");
-                    String apartamento = sc.nextLine();
+                    String ap = sc.nextLine();
                     System.out.print("Telefone: ");
-                    String telefone = sc.nextLine();
+                    String tel = sc.nextLine();
 
-                    Morador morador = new Morador(nome, cpf, email, apartamento, telefone);
-                    sistema.cadastrarMorador(morador);
-                    System.out.println("✅ Morador cadastrado com sucesso!");
+                    sistema.cadastrarMorador(new Morador(nome, cpf, email, ap, tel));
                 }
 
                 case 2 -> {
                     System.out.println("\n--- EDITAR MORADOR ---");
-                    System.out.print("Nome do morador a editar: ");
+                    System.out.print("Nome do morador: ");
                     String nome = sc.nextLine();
                     Morador m = sistema.pesquisarMorador(nome);
 
@@ -56,53 +78,34 @@ public class Main {
                         System.out.print("Novo e-mail: ");
                         String email = sc.nextLine();
                         System.out.print("Novo telefone: ");
-                        String telefone = sc.nextLine();
-                        sistema.editarMorador(nome, email, telefone);
-                        System.out.println("✅ Morador atualizado com sucesso!");
-                    } else {
-                        System.out.println("❌ Morador não encontrado!");
-                    }
+                        String tel = sc.nextLine();
+                        sistema.editarMorador(nome, email, tel);
+                    } else System.out.println("❌ Não encontrado.");
                 }
 
                 case 3 -> {
                     System.out.println("\n--- REMOVER MORADOR ---");
-                    System.out.print("Nome do morador: ");
-                    String nome = sc.nextLine();
-                    sistema.removerMorador(nome);
-                    System.out.println("✅ Morador removido (se existia).");
+                    System.out.print("Nome: ");
+                    sistema.removerMorador(sc.nextLine());
                 }
 
                 case 4 -> {
                     System.out.println("\n--- PESQUISAR MORADOR ---");
                     System.out.print("Nome: ");
-                    String nome = sc.nextLine();
-                    Morador m = sistema.pesquisarMorador(nome);
-
-                    if (m != null) {
-                        System.out.println("\n🔍 Morador encontrado:");
-                        System.out.println("Nome: " + m.getNome());
-                        System.out.println("CPF: " + m.getCpf());
-                        System.out.println("Email: " + m.getEmail());
-                        System.out.println("Apartamento: " + m.getApartamento());
-                        System.out.println("Telefone: " + m.getTelefone());
-                        System.out.println("Situação Financeira: " + m.getSituacaoFinanceira());
-                        System.out.println("Total Devido: R$ " + m.calcularValorTotal());
-                    } else {
-                        System.out.println("❌ Morador não encontrado!");
-                    }
+                    Morador m = sistema.pesquisarMorador(sc.nextLine());
+                    if (m != null) exibirDetalhesMorador(m);
+                    else System.out.println("❌ Não encontrado.");
                 }
 
                 case 5 -> {
                     System.out.println("\n--- ADICIONAR TAXA ---");
-                    System.out.print("Nome do morador: ");
+                    System.out.print("Morador: ");
                     String nome = sc.nextLine();
-                    System.out.print("Mês de referência: ");
+                    System.out.print("Mês: ");
                     String mes = sc.nextLine();
-                    System.out.print("Valor da taxa: ");
-                    double valor = sc.nextDouble();
-                    sc.nextLine();
+                    System.out.print("Valor: ");
+                    double valor = readDoubleSafe(sc);
                     sistema.cadastrarTaxa(nome, new Taxa(mes, valor));
-                    System.out.println("✅ Taxa adicionada com sucesso!");
                 }
 
                 case 6 -> {
@@ -111,47 +114,28 @@ public class Main {
                     String nome = sc.nextLine();
                     System.out.print("CPF: ");
                     String cpf = sc.nextLine();
-                    Visitante v = new Visitante(nome, cpf);
-                    sistema.cadastrarVisitante(v);
-                    System.out.println("✅ Visitante registrado!");
+                    sistema.cadastrarVisitante(new Visitante(nome, cpf));
                 }
 
                 case 7 -> {
-                    System.out.println("\n--- REGISTRAR ENTRADA ---");
-                    System.out.print("Nome do visitante: ");
-                    String nome = sc.nextLine();
-                    Visitante v = sistema.getVisitantes().stream()
-                            .filter(x -> x.getNome().equalsIgnoreCase(nome))
-                            .findFirst().orElse(null);
+                    System.out.print("Visitante: ");
+                    Visitante v = sistema.encontrarVisitante(sc.nextLine());
                     if (v != null) {
                         v.registrarEntrada();
                         sistema.salvarDados();
-                        System.out.println("✅ Entrada registrada!");
-                    } else {
-                        System.out.println("❌ Visitante não encontrado!");
-                    }
+                    } else System.out.println("❌ Não encontrado.");
                 }
 
                 case 8 -> {
-                    System.out.println("\n--- REGISTRAR SAÍDA ---");
-                    System.out.print("Nome do visitante: ");
-                    String nome = sc.nextLine();
-                    Visitante v = sistema.getVisitantes().stream()
-                            .filter(x -> x.getNome().equalsIgnoreCase(nome))
-                            .findFirst().orElse(null);
+                    System.out.print("Visitante: ");
+                    Visitante v = sistema.encontrarVisitante(sc.nextLine());
                     if (v != null) {
                         v.registrarSaida();
                         sistema.salvarDados();
-                        System.out.println("✅ Saída registrada!");
-                    } else {
-                        System.out.println("❌ Visitante não encontrado!");
-                    }
+                    } else System.out.println("❌ Não encontrado.");
                 }
 
-                case 9 -> {
-                    System.out.println("\n--- RELATÓRIO FINANCEIRO ---");
-                    sistema.gerarRelatorioFinanceiro();
-                }
+                case 9 -> sistema.gerarRelatorioFinanceiro();
 
                 case 10 -> {
                     System.out.println("\n--- MORADORES ---");
@@ -161,46 +145,84 @@ public class Main {
                 }
 
                 case 11 -> {
-                    System.out.println("\n--- MARCAR TAXA COMO PAGA ---");
-                    System.out.print("Nome do morador: ");
-                    String nome = sc.nextLine();
-                    Morador m = sistema.pesquisarMorador(nome);
-
-                    if (m != null) {
-                        var taxas = m.listarTaxas();
-                        if (taxas.isEmpty()) {
-                            System.out.println("⚠️ Nenhuma taxa cadastrada para este morador.");
-                        } else {
-                            System.out.println("\nTaxas pendentes:");
-                            for (int i = 0; i < taxas.size(); i++) {
-                                Taxa t = taxas.get(i);
-                                System.out.println((i + 1) + ". " + t.getMesReferencia() + " - " + (t.isStatusPagamento() ? "Pago" : "Pendente") + " - R$ " + t.getValor());
-                            }
-
-                            System.out.print("Escolha o número da taxa a marcar como paga: ");
-                            int indice = sc.nextInt() - 1;
-                            sc.nextLine();
-
-                            if (indice >= 0 && indice < taxas.size()) {
-                                Taxa taxa = taxas.get(indice);
-                                taxa.marcarComoPago();
-                                sistema.salvarDados();
-                                System.out.println("✅ Taxa marcada como paga!");
-                            } else {
-                                System.out.println("❌ Opção inválida!");
-                            }
-                        }
-                    } else {
-                        System.out.println("❌ Morador não encontrado!");
-                    }
+                    System.out.print("Morador: ");
+                    sistema.menuMarcarTaxaComoPaga(sc, sc.nextLine());
                 }
 
-                case 0 -> System.out.println("👋 Encerrando o sistema...");
+                case 12 -> sistema.listarMoradoresEmAtraso().forEach(System.out::println);
+
+                case 13 -> sistema.listarVisitantesPresentes().forEach(System.out::println);
+
+                case 14 -> {
+                    System.out.println("1) TXT  2) CSV");
+                    int tipo = readIntSafe(sc);
+                    if (tipo == 1) sistema.exportarRelatorioTXT();
+                    else if (tipo == 2) sistema.exportarRelatorioCSV();
+                }
+
+                case 15 -> sistema.gerarBackupJSON();
+
+                case 16 -> sistema.imprimirHistorico();
+
+                case 17 -> perfil = login(sc);
+
+                case 18 -> {
+                    System.out.print("Morador: ");
+                    sistema.gerarBoleto(sc.nextLine());
+                }
+
+                case 19 -> {
+                    System.out.print("Termo: ");
+                    sistema.buscar(sc.nextLine()).forEach(System.out::println);
+                }
+
+                case 20 -> sistema.exibirDashboard();
+
+                case 0 -> {
+                    sistema.salvarDados();
+                    sistema.gerarBackupJSON();
+                    System.out.println("Saindo...");
+                }
+
                 default -> System.out.println("❌ Opção inválida!");
             }
 
         } while (opcao != 0);
 
         sc.close();
+    }
+
+    private static String login(Scanner sc) {
+        while (true) {
+            System.out.println("\n=== LOGIN ===");
+            System.out.println("1 - Síndico");
+            System.out.println("2 - Porteiro");
+            System.out.print("Escolha: ");
+            int p = readIntSafe(sc);
+            if (p == 1) return "sindico";
+            if (p == 2) return "porteiro";
+            System.out.println(" Opção inválida.");
+        }
+    }
+
+    private static void exibirDetalhesMorador(Morador m) {
+        System.out.println("\nMorador encontrado:");
+        System.out.println("Nome: " + m.getNome());
+        System.out.println("CPF: " + m.getCpf());
+        System.out.println("Email: " + m.getEmail());
+        System.out.println("Apartamento: " + m.getApartamento());
+        System.out.println("Telefone: " + m.getTelefone());
+        System.out.println("Situação Financeira: " + m.getSituacaoFinanceira());
+        System.out.printf("Total Devido: R$ %.2f%n", m.calcularValorTotal());
+    }
+
+    private static int readIntSafe(Scanner sc) {
+        try { return Integer.parseInt(sc.nextLine().trim()); }
+        catch (Exception e) { return -1; }
+    }
+
+    private static double readDoubleSafe(Scanner sc) {
+        try { return Double.parseDouble(sc.nextLine().trim()); }
+        catch (Exception e) { return 0; }
     }
 }

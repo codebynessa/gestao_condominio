@@ -1,0 +1,21 @@
+RELATÓRIO - 2025-11-15T16:57:52.407684933
+Morador: Vanessa
+Apartamento: 2
+Total devido: R$ 0,00
+---------------------------
+Morador: nay
+Apartamento: 502
+Total devido: R$ 1300,00
+---------------------------
+Morador: leo
+Apartamento: 555
+Total devido: R$ 0,00
+---------------------------
+Morador: gustavo
+Apartamento: 444
+Total devido: R$ 0,00
+---------------------------
+Morador: tainara
+Apartamento: 200
+Total devido: R$ 800,00
+---------------------------

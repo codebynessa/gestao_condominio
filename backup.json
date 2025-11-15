@@ -1,0 +1,27 @@
+{ "moradores": [
+  {
+    "nome": "Vanessa",
+    "cpf": "",
+    "apartamento": "2"
+  },
+  {
+    "nome": "nay",
+    "cpf": "",
+    "apartamento": "502"
+  },
+  {
+    "nome": "leo",
+    "cpf": "",
+    "apartamento": "555"
+  },
+  {
+    "nome": "gustavo",
+    "cpf": "4586",
+    "apartamento": "444"
+  },
+  {
+    "nome": "tainara",
+    "cpf": "555555",
+    "apartamento": "200"
+  }
+]}
