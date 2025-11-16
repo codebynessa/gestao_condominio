@@ -23,10 +23,18 @@ public class Taxa implements Serializable {
         this.statusPagamento = false;
     }
 
-    public int getId() { return id; }
-    public String getMesReferencia() { return mesReferencia; }
-    public double getValor() { return valor; }
-    public boolean isStatusPagamento() { return statusPagamento; }
+    public int getId() {
+        return id;
+    }
+    public String getMesReferencia() {
+        return mesReferencia;
+    }
+    public double getValor() {
+        return valor;
+    }
+    public boolean isStatusPagamento() {
+        return statusPagamento;
+    }
 
     public void marcarComoPago() {
         this.statusPagamento = true;

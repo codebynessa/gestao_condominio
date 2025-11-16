@@ -1,3 +1,9 @@
+/**
+ * Autor: Vanessa de Freitas Ferreira
+ * Data: 15/11/2025
+ * Projeto: SeuProjetoAqui
+ * Descrição:
+ */
 package model;
 
 import java.io.Serializable;
@@ -23,7 +29,7 @@ public class Visitante implements Serializable {
         this.status = "Não registrado";
     }
 
-    // === Getters (conforme seu diagrama) ===
+
     public String getNome() {
         return nome;
     }
@@ -48,7 +54,7 @@ public class Visitante implements Serializable {
         return horaSaida;
     }
 
-    // === Métodos ===
+    // Metodos
     public void registrarEntrada() {
         this.dataVisita = LocalDate.now();
         this.horaEntrada = LocalTime.now().withNano(0); // sem nanossegundos

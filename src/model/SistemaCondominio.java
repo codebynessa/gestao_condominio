@@ -282,7 +282,7 @@ public class SistemaCondominio implements Serializable {
     }
 
 
-    // SALVAR / CARREGAR
+    // SALVAR
 
     public void salvarDados() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO))) {
@@ -304,6 +304,10 @@ public class SistemaCondominio implements Serializable {
 
     // GETTERS
 
-    public List<Morador> getMoradores() { return moradores; }
-    public List<Visitante> getVisitantes() { return visitantes; }
+    public List<Morador> getMoradores() {
+        return moradores;
+    }
+    public List<Visitante> getVisitantes() {
+        return visitantes;
+    }
 }

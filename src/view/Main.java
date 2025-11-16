@@ -1,3 +1,9 @@
+/**
+ * Autor: Vanessa de Freitas Ferreira
+ * Data: 14/11/2025
+ * Projeto: SeuProjetoAqui
+ * Descrição:
+ */
 package view;
 
 import model.*;
@@ -40,12 +46,12 @@ public class Main {
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
-            opcao = readIntSafe(sc); // SEM nextLine() aqui!
+            opcao = readIntSafe(sc);
 
             // Restrição de porteiro
             if ("porteiro".equals(perfil)) {
                 if (!(opcao == 6 || opcao == 7 || opcao == 8 || opcao == 10 || opcao == 13 || opcao == 20 || opcao == 0 || opcao == 17)) {
-                    System.out.println("❌ Acesso negado para seu perfil (porteiro).");
+                    System.out.println(" Acesso negado para seu perfil (porteiro).");
                     continue;
                 }
             }
@@ -80,7 +86,7 @@ public class Main {
                         System.out.print("Novo telefone: ");
                         String tel = sc.nextLine();
                         sistema.editarMorador(nome, email, tel);
-                    } else System.out.println("❌ Não encontrado.");
+                    } else System.out.println(" Não encontrado.");
                 }
 
                 case 3 -> {
@@ -94,7 +100,7 @@ public class Main {
                     System.out.print("Nome: ");
                     Morador m = sistema.pesquisarMorador(sc.nextLine());
                     if (m != null) exibirDetalhesMorador(m);
-                    else System.out.println("❌ Não encontrado.");
+                    else System.out.println(" Não encontrado.");
                 }
 
                 case 5 -> {
@@ -123,7 +129,7 @@ public class Main {
                     if (v != null) {
                         v.registrarEntrada();
                         sistema.salvarDados();
-                    } else System.out.println("❌ Não encontrado.");
+                    } else System.out.println(" Não encontrado.");
                 }
 
                 case 8 -> {
@@ -132,7 +138,7 @@ public class Main {
                     if (v != null) {
                         v.registrarSaida();
                         sistema.salvarDados();
-                    } else System.out.println("❌ Não encontrado.");
+                    } else System.out.println(" Não encontrado.");
                 }
 
                 case 9 -> sistema.gerarRelatorioFinanceiro();
@@ -184,7 +190,7 @@ public class Main {
                     System.out.println("Saindo...");
                 }
 
-                default -> System.out.println("❌ Opção inválida!");
+                default -> System.out.println(" Opção inválida!");
             }
 
         } while (opcao != 0);
@@ -199,8 +205,12 @@ public class Main {
             System.out.println("2 - Porteiro");
             System.out.print("Escolha: ");
             int p = readIntSafe(sc);
-            if (p == 1) return "sindico";
-            if (p == 2) return "porteiro";
+
+            if (p == 1)
+                return "sindico";
+            else if (p == 2)
+                return "porteiro";
+
             System.out.println(" Opção inválida.");
         }
     }
@@ -217,12 +227,20 @@ public class Main {
     }
 
     private static int readIntSafe(Scanner sc) {
-        try { return Integer.parseInt(sc.nextLine().trim()); }
-        catch (Exception e) { return -1; }
+        try {
+            return Integer.parseInt(sc.nextLine().trim());
+        }
+        catch (Exception e) {
+            return -1;
+        }
     }
 
     private static double readDoubleSafe(Scanner sc) {
-        try { return Double.parseDouble(sc.nextLine().trim()); }
-        catch (Exception e) { return 0; }
+        try {
+            return Double.parseDouble(sc.nextLine().trim());
+        }
+        catch (Exception e) {
+            return 0;
+        }
     }
 }

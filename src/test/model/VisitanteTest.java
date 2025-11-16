@@ -16,7 +16,7 @@ public class VisitanteTest {
 
     @Test
     void testRegistrarEntrada() {
-        Visitante v = new Visitante("João", "00011122233");
+        Visitante v = new Visitante("João", "22222222");
 
         v.registrarEntrada();
 
@@ -26,7 +26,7 @@ public class VisitanteTest {
 
     @Test
     void testRegistrarSaida() {
-        Visitante v = new Visitante("Maria", "44455566677");
+        Visitante v = new Visitante("Maria", "00000000");
 
         v.registrarEntrada();
         v.registrarSaida();

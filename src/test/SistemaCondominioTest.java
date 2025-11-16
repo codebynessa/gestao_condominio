@@ -1,3 +1,9 @@
+/**
+ * Autor: Vanessa de Freitas Ferreira
+ * Data: 16/11/2025
+ * Projeto: SeuProjetoAqui
+ * Descrição:
+ */
 package test.model;
 
 import model.Morador;

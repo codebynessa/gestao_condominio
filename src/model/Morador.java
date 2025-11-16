@@ -105,7 +105,10 @@ public class Morador implements Serializable {
     }
 
     public double calcularValorTotal() {
-        return taxas.stream().mapToDouble(Taxa::getValor).sum();
+        return taxas.stream()
+                .filter(t -> !t.isStatusPagamento())   //  soma taxas pendentes
+                .mapToDouble(Taxa::getValor)
+                .sum();
     }
 
     @Override
